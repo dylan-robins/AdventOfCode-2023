@@ -29,7 +29,15 @@ def test():
     print(example_data, end='')
     
     lines = example_data.splitlines()
-    print("Result:", sum_calibration_values(lines))
+    result = sum_calibration_values(lines)
+    expected = 142
+    print(f"{result=} | {expected=}")
+    
+    if result == expected:
+        print("TEST PASSED")
+    else:
+        print("TEST FAILED")
+        exit(1)
     print("_"*80)
     
 def main():

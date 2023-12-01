@@ -89,12 +89,14 @@ def sum_calibration_values(lines: Iterable[str]) -> int:
         sum += int(first + last)
     return sum
     
+    
 def main():
     input_file = Path(__file__).parent / "input.txt"
     print(f"Real data from {input_file}:")
     lines = input_file.read_text().splitlines()
     print("Result:", sum_calibration_values(lines))
     print("_"*80)
+    
     
 def test():
     example_data = (
@@ -110,9 +112,18 @@ def test():
     print(example_data, end='')
     
     lines = example_data.splitlines()
-    print(sum_calibration_values(lines))
-    print("_"*80)
+    result = sum_calibration_values(lines)
+    expected = 281
+    print(f"{result=} | {expected=}")
     
+    if result == expected:
+        print("TEST PASSED")
+    else:
+        print("TEST FAILED")
+        exit(1)
+    print("_"*80)
+
+
 if __name__ == "__main__":
     test()
     main()
