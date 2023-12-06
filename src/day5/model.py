@@ -1,18 +1,18 @@
 from dataclasses import dataclass, field
 import re
-from typing import Generic, Iterator, Literal, TypeAlias, TypeVar, NewType, cast
+from typing import Generic, Iterator, Literal, TypeVar, NewType, cast
 
 from tqdm import tqdm
 
 
-Seed: TypeAlias = NewType("Seed", int)
-Soil: TypeAlias = NewType("Soil", int)
-Fertilizer: TypeAlias = NewType("Fertilizer", int)
-Water: TypeAlias = NewType("Water", int)
-Light: TypeAlias = NewType("Light", int)
-Temperature: TypeAlias = NewType("Temperature", int)
-Humidity: TypeAlias = NewType("Humidity", int)
-Location: TypeAlias = NewType("Location", int)
+Seed = NewType("Seed", int)
+Soil = NewType("Soil", int)
+Fertilizer = NewType("Fertilizer", int)
+Water = NewType("Water", int)
+Light = NewType("Light", int)
+Temperature = NewType("Temperature", int)
+Humidity = NewType("Humidity", int)
+Location = NewType("Location", int)
 
 U = TypeVar(
     "U",
@@ -53,7 +53,7 @@ class LazyRange(Generic[U]):
         return val - self.start
     
     def get_value(self, index: int) -> U:
-        return self.start + index
+        return cast(U, self.start + index)
     
     def __repr__(self) -> str:
         return f"[{self.start},{self.end}["
@@ -70,7 +70,9 @@ class Map(Generic[U, V]):
         self.segments: dict[LazyRange[U], LazyRange[V]] = {}
         
     def add_section(self, dest_start: V, src_start: U, length: int):
-        self.segments[LazyRange(src_start, src_start+length)] = LazyRange(dest_start, dest_start+length)
+        src_end = cast(U, src_start+length)
+        dest_end = cast(V, dest_start+length)
+        self.segments[LazyRange(src_start, src_end)] = LazyRange(dest_start, dest_end)
 
     def __getitem__(self, key: U) -> V:
         for src, dest in self.segments.items():
@@ -136,12 +138,14 @@ class Almanac:
             return sum(length for length in self._seeds_raw[1::2])
             
     
-    def lowest_seed_location(self) -> Location:
+    def lowest_seed_location(self) -> Location | None:
         min_value: Location | None = None
+        
         for seed in tqdm(self.seeds, total=self.seed_count, unit="seeds", smoothing=0):
             loc = self.get_seed_location(seed)
             if min_value is None or min_value > loc:
                 min_value = loc
+        
         return min_value
     
     def seed_iterator_p1(self) -> Iterator[Seed]:
