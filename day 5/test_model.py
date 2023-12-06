@@ -6,16 +6,16 @@ def test_add_section():
     m: Map[Seed, Soil] = Map()
     m.add_section(50, 98, 5)
 
-    assert list(m._map.keys()) == [98, 99, 100, 101, 102]
-    assert list(m._map.values()) == [50, 51, 52, 53, 54]
+    assert [r.eval() for r in m.segments.keys()] == [range(98, 103)]
+    assert [r.eval() for r in m.segments.values()] == [range(50, 55)]
 
 
 def test_add_section_2():
     m: Map[Seed, Soil] = Map()
     m.add_section(52, 50, 48)
 
-    assert list(m._map.keys()) == list(range(50, 98))
-    assert list(m._map.values()) == list(range(52, 100))
+    assert [r.eval() for r in m.segments.keys()] == [range(50, 98)]
+    assert [r.eval() for r in m.segments.values()] == [range(52, 100)]
 
 @pytest.fixture
 def test_input():
@@ -55,23 +55,37 @@ def test_input():
         "56 93 4\n"
     )
 
-def test_almanac_seeds_correct(test_input: str):
-    almanac = Almanac.load_file_content(test_input)
-    assert almanac.seeds == [79, 14, 55, 13]
+def test_almanac_seeds_correct_p1(test_input: str):
+    almanac = Almanac.load_file_content(test_input, "part1")
+    assert list(almanac.seeds) == [79, 14, 55, 13]
 
-def test_almanac_map_lengths_correct(test_input: str):
-    almanac = Almanac.load_file_content(test_input)
-    assert len(almanac.seed_to_soil._map) == 2+48
-    assert len(almanac.soil_to_fertilizer._map) == 37+2+15
-    assert len(almanac.fertilizer_to_water._map) == 8+42+7+4
-    assert len(almanac.water_to_light._map) == 7+70
-    assert len(almanac.light_to_temperature._map) == 23+19+13
-    assert len(almanac.temperature_to_humidity._map) == 1+69
-    assert len(almanac.humidity_to_location._map) == 37+4
+def test_seed_count_p1(test_input: str):
+    almanac = Almanac.load_file_content(test_input, "part1")
+    assert almanac.seed_count == 4
+    
+
+def test_almanac_seeds_correct_p2(test_input: str):
+    almanac = Almanac.load_file_content(test_input, "part2")
+    assert list(almanac.seeds) == [*range(79, 92+1), *range(55, 67+1)]
+    
+
+def test_seed_count_p2(test_input: str):
+    almanac = Almanac.load_file_content(test_input, "part2")
+    assert almanac.seed_count == (93-79)+(68-55)
+
+def test_almanacsegments_lengths_correct(test_input: str):
+    almanac = Almanac.load_file_content(test_input, "part1")
+    assert [len(thing.eval()) for thing in almanac.seed_to_soil.segments] == [2, 48]
+    assert [len(thing.eval()) for thing in almanac.soil_to_fertilizer.segments] == [37, 2, 15]
+    assert [len(thing.eval()) for thing in almanac.fertilizer_to_water.segments] == [8, 42, 7, 4]
+    assert [len(thing.eval()) for thing in almanac.water_to_light.segments] == [7, 70]
+    assert [len(thing.eval()) for thing in almanac.light_to_temperature.segments] == [23, 19, 13]
+    assert [len(thing.eval()) for thing in almanac.temperature_to_humidity.segments] == [1, 69]
+    assert [len(thing.eval()) for thing in almanac.humidity_to_location.segments] == [37, 4]
     
 
 def test_almanac_seed_to_soil_example(test_input: str):
-    almanac = Almanac.load_file_content(test_input)
+    almanac = Almanac.load_file_content(test_input, "part1")
     assert almanac.seed_to_soil[0] == 0
     assert almanac.seed_to_soil[1] == 1
     assert almanac.seed_to_soil[48] == 48
@@ -85,7 +99,7 @@ def test_almanac_seed_to_soil_example(test_input: str):
     
 
 def test_almanac_seed_to_soil_example2(test_input: str):
-    almanac = Almanac.load_file_content(test_input)
+    almanac = Almanac.load_file_content(test_input, "part2")
     assert almanac.seed_to_soil[79] == 81
     assert almanac.seed_to_soil[14] == 14
     assert almanac.seed_to_soil[55] == 57
@@ -93,7 +107,7 @@ def test_almanac_seed_to_soil_example2(test_input: str):
     
 
 def test_almanac_seed_to_location(test_input: str):
-    almanac = Almanac.load_file_content(test_input)
+    almanac = Almanac.load_file_content(test_input, "part1")
     assert almanac.get_seed_location(79) == 82
     assert almanac.get_seed_location(14) == 43
     assert almanac.get_seed_location(55) == 86
@@ -101,5 +115,5 @@ def test_almanac_seed_to_location(test_input: str):
     
 
 def test_almanac_closest_seed(test_input: str):
-    almanac = Almanac.load_file_content(test_input)
-    assert almanac.lowest_seed_location == 35
+    almanac = Almanac.load_file_content(test_input, "part1")
+    assert almanac.lowest_seed_location() == 35
