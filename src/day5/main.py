@@ -2,6 +2,7 @@ from pathlib import Path
 
 from model import Almanac
 
+
 def part1():
     input_file = Path(__file__).parent / "input.txt"
     print(f"Loading part 1 from {input_file}...")
@@ -10,6 +11,15 @@ def part1():
 
     result = almanac.lowest_seed_location()
     print("Result:", result)
+
+    expected = 510109797
+    print(f"{result=} | {expected=}")
+
+    if result == expected:
+        print("PASS")
+    else:
+        print("FAIL")
+        exit(1)
 
     print("_" * 80)
 
