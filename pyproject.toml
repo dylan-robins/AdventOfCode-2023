@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "adventofcode-2023"
+version = "1.0.0"
+description = "All the code I write to solve the AoC 2023 programming problems"
+authors = ["dylan-robins <dylan.robins@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+tqdm = "^4.66.1"
+typing-extensions = "^4.8.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.11.0"
+isort = "^5.12.0"
+pytest = "^7.4.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
