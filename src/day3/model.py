@@ -48,7 +48,9 @@ class Schematic:
         return cls(part_list)
 
     @classmethod
-    def get_adjascent_numbers(cls, printout_lines: list[str], coords: Vec2D) -> Iterable[int]:
+    def get_adjascent_numbers(
+        cls, printout_lines: list[str], coords: Vec2D
+    ) -> Iterable[int]:
         neighbours = []
         for x_off in [-1, 0, 1]:
             for y_off in [-1, 0, 1]:

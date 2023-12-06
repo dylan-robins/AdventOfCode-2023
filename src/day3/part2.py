@@ -9,9 +9,9 @@ def get_gear_ratios(parts: list[Part]):
     grouped_parts = groupby(parts, key=lambda p: p.coords)
     for k, g in grouped_parts:
         group = list(g)
-        if group[0].symbol != '*':
+        if group[0].symbol != "*":
             continue
-        
+
         if len(group) == 2:
             yield group[0].part_number * group[1].part_number
 

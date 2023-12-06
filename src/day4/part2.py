@@ -2,12 +2,13 @@ from pathlib import Path
 
 from model import load_scratchcards, calc_won_card_ids
 
+
 def main():
     input_file = Path(__file__).parent / "input.txt"
     print(f"Loading real data from {input_file}...")
 
     scratchcards = list(load_scratchcards(input_file.read_text().splitlines()))
-    
+
     winnings = [
         [won_card.id for won_card in calc_won_card_ids(scratchcards, sc)]
         for sc in scratchcards
@@ -16,11 +17,9 @@ def main():
     for won_cards in winnings:
         flat_winnings.extend(won_cards)
 
-    result = {
-        sc.id: 1 + flat_winnings.count(sc.id) for sc in scratchcards
-    }
+    result = {sc.id: 1 + flat_winnings.count(sc.id) for sc in scratchcards}
     print("Result:", result)
-    
+
     final_result = sum(result.values())
     print("Final result:", final_result)
 
@@ -39,7 +38,7 @@ def test():
     print("Example data:")
 
     scratchcards = list(load_scratchcards(example_data.splitlines()))
-    
+
     winnings = [
         [won_card.id for won_card in calc_won_card_ids(scratchcards, sc)]
         for sc in scratchcards
@@ -49,9 +48,7 @@ def test():
         flat_winnings.extend(won_cards)
     print(flat_winnings)
 
-    result = {
-        sc.id: 1 + flat_winnings.count(sc.id) for sc in scratchcards
-    }
+    result = {sc.id: 1 + flat_winnings.count(sc.id) for sc in scratchcards}
     expected = {
         1: 1,
         2: 2,
@@ -67,7 +64,7 @@ def test():
     else:
         print("TEST FAILED")
         exit(1)
-    
+
     final_result = sum(result.values())
     final_expected = 30
 
@@ -76,7 +73,7 @@ def test():
     else:
         print("TEST FAILED")
         exit(1)
-    
+
     print("_" * 80)
 
 

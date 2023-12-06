@@ -48,7 +48,7 @@ def test():
     print("Powers:", *(f"- {handful.power}" for handful in smallest_handfuls), sep="\n")
 
     result = sum(handful.power for handful in smallest_handfuls)
-    
+
     expected = 2286
     print(f"{result=} | {expected=}")
 

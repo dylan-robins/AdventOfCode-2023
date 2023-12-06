@@ -2,6 +2,7 @@ from pathlib import Path
 
 from model import load_scratchcards
 
+
 def main():
     input_file = Path(__file__).parent / "input.txt"
     print(f"Loading real data from {input_file}...")
